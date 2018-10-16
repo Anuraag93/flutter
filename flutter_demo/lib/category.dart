@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'converterRoute.dart';
 
 class Category extends StatelessWidget {
   final IconData icon;
-  final Color color;
-  final String text;
+  final ColorSwatch color;
+  final String name;
   final _widgetHeight = 100.0;
-  final _borderRadius = BorderRadius.circular(100/2);
-  
-  Category({@required this.icon, this.color, @required this.text});
+  final _borderRadius = BorderRadius.circular(100 / 2);
+
+  Category({@required this.icon, this.color, @required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +19,9 @@ class Category extends StatelessWidget {
         borderRadius: _borderRadius,
         highlightColor: color,
         splashColor: color,
-
         onTap: () {
           print('I was Tapped !!');
-        },
-        onDoubleTap: (){
-          print('I was Double Tapped !!!');
+          _navigateToConverter(context);
         },
         child: Container(
           height: _widgetHeight,
@@ -39,7 +37,7 @@ class Category extends StatelessWidget {
                   )),
               Center(
                   child: Text(
-                text,
+                name,
                 style: TextStyle(fontSize: 24.0),
               ))
             ],
@@ -47,5 +45,27 @@ class Category extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _navigateToConverter(BuildContext context) {
+    if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            name,
+            style: Theme.of(context).textTheme.display1,
+          ),
+          centerTitle: true,
+          backgroundColor: color,
+        ),
+        body: ConverterRoute(
+          name: name,
+          color: color,
+        ),backgroundColor: color[100],
+      );
+    }));
   }
 }

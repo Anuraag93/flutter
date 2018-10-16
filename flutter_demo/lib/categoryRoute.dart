@@ -5,14 +5,15 @@ final _backgroundColor = Colors.green[100];
 
 class CategoryRoute extends StatelessWidget {
   static const _categoryNames = <String>[
-    'Cake',
-    'Radio',
-    'Terrain',
-    'Palette',
-    'Watch',
-    'Light Bulb',
-    'Gesture',
-    'Payment',
+    'Length',
+    'Area',
+    'Volume',
+    'Mass',
+    'Time',
+    'Digital Storage',
+    'Energy',
+    'Currency',
+//    'Cake','Radio','Terrain','Palette','Watch','Light Bulb','Gesture','Payment',
   ];
 
   static const _baseColors = <Color>[
@@ -50,14 +51,14 @@ class CategoryRoute extends StatelessWidget {
 
     for (var i = 0; i < _categoryNames.length; i++) {
       categories.add(Category(
-        icon: _categoryIcons[i],
-        text: _categoryNames[i],
+        icon: Icons.all_inclusive,//_categoryIcons[i],
+        name: _categoryNames[i],
         color: _baseColors[i],
       ));
     }
 
     final appBar = AppBar(
-      backgroundColor: _backgroundColor,
+      backgroundColor: Color(0xFF013487),//_backgroundColor,
       elevation: 0.0,
       centerTitle: true,
       title: Text(
