@@ -58,7 +58,7 @@ class CategoryRoute extends StatelessWidget {
     }
 
     final appBar = AppBar(
-      backgroundColor: Color(0xFF013487),//_backgroundColor,
+      backgroundColor: _backgroundColor,
       elevation: 0.0,
       centerTitle: true,
       title: Text(

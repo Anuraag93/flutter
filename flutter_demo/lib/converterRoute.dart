@@ -7,42 +7,29 @@ class ConverterRoute extends StatelessWidget {
   const ConverterRoute({Key key, this.color, @required this.name})
       : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
+    bool _showValidationError = false;
+
     final _inputTextField = TextField(
       style: TextStyle(fontSize: 40.0),
       textAlign: TextAlign.left,
+      keyboardType: TextInputType.numberWithOptions(),
       decoration: InputDecoration(
-          border: OutlineInputBorder(),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0)),
           contentPadding: EdgeInsets.symmetric(
             horizontal: 30.0,
             vertical: 10.0,
           ),
           labelText: 'Input',
           labelStyle: TextStyle(fontSize: 30.0),
+          errorText: _showValidationError ? 'Invalid Value' : null,
           ),
       autofocus: true,
     );
-    final _outputTextField = TextField(
-      style: TextStyle(
-        fontSize: 40.0,
-      ),
-      maxLines: 1,
-      textAlign: TextAlign.left,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 30.0,
-            vertical: 10.0,
-          ),
-          hintText: 'Converted number will display here.',
-          labelText: 'Output',
-          labelStyle: TextStyle(fontSize: 30.0),
-          hintStyle: TextStyle(
-            fontSize: 20.0,
-          )),
-      autofocus: true,
-    );
+
 
     final items = <DropdownMenuItem>[];
 
@@ -58,7 +45,7 @@ class ConverterRoute extends StatelessWidget {
       onChanged: null,
     );
 
-    Container _buildIOContainer(bool isInput) {
+    Container _buildIOContainer() {
       return Container(
         padding: EdgeInsets.symmetric(
           vertical: 5.0,
@@ -66,7 +53,8 @@ class ConverterRoute extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            isInput ? _inputTextField : _outputTextField,
+//            isInput ? _inputTextField : _outputTextField,
+          _inputTextField,
             _dropDownList,
           ],
         ),
@@ -78,7 +66,7 @@ class ConverterRoute extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          _buildIOContainer(true),
+          _buildIOContainer(),
           Container(
             decoration: BoxDecoration(border: Border.all(width: 2.0)),
             padding: const EdgeInsets.all(10.0),
@@ -86,7 +74,7 @@ class ConverterRoute extends StatelessWidget {
               Icons.autorenew,
             ),
           ),
-          _buildIOContainer(false),
+          _buildIOContainer(),
         ],
       ),
     ]);
