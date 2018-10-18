@@ -1,94 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+import 'unit.dart';
 
-class ConverterRoute extends StatelessWidget {
-  final ColorSwatch color;
+class ConverterRoute extends StatefulWidget {
   final String name;
+  final Color color;
+  final List<Unit> units;
 
-  const ConverterRoute({Key key, this.color, @required this.name})
-      : super(key: key);
+  const ConverterRoute({
+    @required this.name,
+    @required this.color,
+    @required this.units,
+  })  : assert(name != null),
+        assert(color != null),
+        assert(units != null);
 
   @override
+  _ConverterRouteState createState() => _ConverterRouteState();
+}
+
+class _ConverterRouteState extends State<ConverterRoute> {
+  @override
   Widget build(BuildContext context) {
-    final _inputTextField = TextField(
-      style: TextStyle(fontSize: 40.0),
-      textAlign: TextAlign.left,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 30.0,
-            vertical: 10.0,
-          ),
-          labelText: 'Input',
-          labelStyle: TextStyle(fontSize: 30.0),
-          ),
-      autofocus: true,
-    );
-    final _outputTextField = TextField(
-      style: TextStyle(
-        fontSize: 40.0,
-      ),
-      maxLines: 1,
-      textAlign: TextAlign.left,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 30.0,
-            vertical: 10.0,
-          ),
-          hintText: 'Converted number will display here.',
-          labelText: 'Output',
-          labelStyle: TextStyle(fontSize: 30.0),
-          hintStyle: TextStyle(
-            fontSize: 20.0,
-          )),
-      autofocus: true,
-    );
-
-    final items = <DropdownMenuItem>[];
-
-    for (var i = 0; i <= 8; i++) {
-      items.add(DropdownMenuItem(
-          child: Center(
-        child: Text('Counter $i',),
-      )));
-    }
-
-    final _dropDownList = DropdownButton(
-      items: items,
-      onChanged: null,
-    );
-
-    Container _buildIOContainer(bool isInput) {
+    final unitWidgets = widget.units.map((Unit unit) {
       return Container(
-        padding: EdgeInsets.symmetric(
-          vertical: 5.0,
-        ),
+        color: widget.color,
+        margin: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            isInput ? _inputTextField : _outputTextField,
-            _dropDownList,
+            Text(
+              unit.name,
+              style: Theme.of(context).textTheme.headline,
+            ),
+            Text(
+              'Conversion: ${unit.conversion}',
+              style: Theme.of(context).textTheme.subhead,
+            ),
           ],
         ),
       );
-    }
+    }).toList();
 
-    return ListView(padding: const EdgeInsets.all(20.0), children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          _buildIOContainer(true),
-          Container(
-            decoration: BoxDecoration(border: Border.all(width: 2.0)),
-            padding: const EdgeInsets.all(10.0),
-            child: Icon(
-              Icons.autorenew,
-            ),
-          ),
-          _buildIOContainer(false),
-        ],
-      ),
-    ]);
+    return ListView(
+      children: unitWidgets,
+    );
   }
 }
