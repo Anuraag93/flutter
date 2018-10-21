@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'categoryRoute.dart';
+import 'category_route.dart';
 
 void main() {
   runApp(UnitConversionApp());
@@ -21,10 +21,6 @@ class UnitConversionApp extends StatelessWidget {
         primaryColor: Colors.grey[500],
         textSelectionHandleColor: Colors.green[500],
 
-        scaffoldBackgroundColor: Colors.green[100],
-        highlightColor: Colors.amber,
-        splashColor: Colors.amber,
-        selectedRowColor: Colors.brown[400],
       ),
       home: CategoryRoute(),
     );

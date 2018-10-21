@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'unit.dart';
+import 'category.dart';
 
 const _padding = EdgeInsets.all(16.0);
 
-class ConverterRoute extends StatefulWidget {
-  final String name;
-  final Color color;
-  final List<Unit> units;
+class UnitConverter extends StatefulWidget {
+//  final String name;
+//  final Color color;
+//  final List<Unit> units;
+final Category category;
 
-  const ConverterRoute({
-    @required this.name,
-    @required this.color,
-    @required this.units,
-  })  : assert(name != null),
-        assert(color != null),
-        assert(units != null);
+  const UnitConverter({
+    @required this.category,
+  })  : assert(category != null);
 
   @override
-  _ConverterRouteState createState() => _ConverterRouteState();
+  _UnitConverterState createState() => _UnitConverterState();
 }
 
-class _ConverterRouteState extends State<ConverterRoute> {
+class _UnitConverterState extends State<UnitConverter> {
   bool _showValidationError = false;
   List<DropdownMenuItem> _unitMenuItems;
   double _inputValue;
@@ -33,13 +31,23 @@ class _ConverterRouteState extends State<ConverterRoute> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _createDropdownMenuItems();
-    _setDefaults();
+    createDropdownMenuItems();
+    setDefaults();
   }
+@override
+  void didUpdateWidget(UnitConverter oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
 
-  void _createDropdownMenuItems() {
+    if (widget.category != oldWidget.category) {
+      print('oldWidget.category was not similar');
+      createDropdownMenuItems();
+      setDefaults();
+    }
+  }
+  void createDropdownMenuItems() {
     var newItems = <DropdownMenuItem>[];
-    for (var unit in widget.units) {
+    for (var unit in widget.category.units) {
       newItems.add(DropdownMenuItem(
         value: unit.name,
         child: Container(
@@ -55,10 +63,10 @@ class _ConverterRouteState extends State<ConverterRoute> {
     });
   }
 
-  void _setDefaults() {
+  void setDefaults() {
     setState(() {
-      _fromValue = widget.units[0];
-      _toValue = widget.units[1];
+      _fromValue = widget.category.units[0];
+      _toValue = widget.category.units[1];
     });
   }
 
@@ -81,7 +89,7 @@ class _ConverterRouteState extends State<ConverterRoute> {
   }
 
   Unit _getUnit(String unitName) {
-    return widget.units.firstWhere((Unit unit) {
+    return widget.category.units.firstWhere((Unit unit) {
       return unit.name == unitName;
     }, orElse: null);
   }
@@ -219,7 +227,6 @@ class _ConverterRouteState extends State<ConverterRoute> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
-//        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _inputGroup,
           _compareArrow,

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'category.dart';
 import 'unit.dart';
+import 'category_tile.dart';
+import 'backdrop.dart';
+import 'unit_converter.dart';
 
 final _backgroundColor = Colors.green[100];
 
@@ -12,6 +15,7 @@ class CategoryRoute extends StatefulWidget {
 
 class _CategoryRouteState extends State<CategoryRoute> {
   final _categories = <Category>[];
+  Category currentCategoryDisplay;
   static const _categoryNames = <String>[
     'Length',
     'Area',
@@ -91,11 +95,17 @@ class _CategoryRouteState extends State<CategoryRoute> {
         units: _retrieveUnitList(_categoryNames[i]),
       ));
     }
+    currentCategoryDisplay = _categories[0];
   }
 
   Widget _buildCategoryWidgets() {
     return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => _categories[index],
+      itemBuilder: (BuildContext context, int index) {
+        return CategoryTile(
+          category: _categories[index],
+          onTap: _onCategoryTap,
+        );
+      },
       itemCount: _categories.length,
     );
   }
@@ -108,6 +118,23 @@ class _CategoryRouteState extends State<CategoryRoute> {
         name: '$categoryName unit $i',
       );
     });
+  }
+
+  void _onCategoryTap(Category value) {
+    print('$value was tapped......');
+    setState(() {
+      currentCategoryDisplay = value;
+    });
+  }
+
+  Text appBarText(String heading) {
+    return Text(
+      heading,
+      style: TextStyle(
+        fontSize: 30.0,
+        color: Colors.black,
+      ),
+    );
   }
 
   @override
@@ -131,9 +158,15 @@ class _CategoryRouteState extends State<CategoryRoute> {
       child: _buildCategoryWidgets(),
     );
 
-    return Scaffold(
-      appBar: appBar,
-      body: listView,
-    );
+    return Backdrop(
+        currentCategory: currentCategoryDisplay,
+        frontPanel: UnitConverter(category: currentCategoryDisplay),
+        backPanel: listView,
+        frontTitle: appBarText(currentCategoryDisplay.name),
+        backTitle: appBarText('Unit Converter'));
+//    return Scaffold(
+//      appBar: appBar,
+//      body: listView,
+//    );
   }
 }
