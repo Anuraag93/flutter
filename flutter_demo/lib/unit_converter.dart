@@ -9,11 +9,11 @@ class UnitConverter extends StatefulWidget {
 //  final String name;
 //  final Color color;
 //  final List<Unit> units;
-final Category category;
+  final Category category;
 
   const UnitConverter({
     @required this.category,
-  })  : assert(category != null);
+  }) : assert(category != null);
 
   @override
   _UnitConverterState createState() => _UnitConverterState();
@@ -26,17 +26,17 @@ class _UnitConverterState extends State<UnitConverter> {
   String _convertedValue = '';
   Unit _fromValue;
   Unit _toValue;
+  final _inputKey = GlobalKey(debugLabel: 'inputText');
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     createDropdownMenuItems();
     setDefaults();
   }
-@override
+
+  @override
   void didUpdateWidget(UnitConverter oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
     if (widget.category != oldWidget.category) {
@@ -45,6 +45,7 @@ class _UnitConverterState extends State<UnitConverter> {
       setDefaults();
     }
   }
+
   void createDropdownMenuItems() {
     var newItems = <DropdownMenuItem>[];
     for (var unit in widget.category.units) {
@@ -171,15 +172,17 @@ class _UnitConverterState extends State<UnitConverter> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           TextField(
+            key: _inputKey,
             keyboardType: TextInputType.number,
             style: Theme.of(context).textTheme.display1,
             decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(0.0)),
-                labelText: 'Input',
-                labelStyle: Theme.of(context).textTheme.display1,
-                errorText:
-                    _showValidationError ? 'Invalid Number Entered' : null),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(0.0)),
+              labelText: 'Input',
+              labelStyle: Theme.of(context).textTheme.display1,
+              errorText: _showValidationError ? 'Invalid Number Entered' : null,
+
+            ),
             onChanged: _updateInputValue,
           ),
           _createDropdown(_fromValue.name, _updateFromConversion),
@@ -208,14 +211,11 @@ class _UnitConverterState extends State<UnitConverter> {
       ),
     );
 
-    final _compareArrow = Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: RotatedBox(
-        quarterTurns: 1,
-        child: Icon(
-          Icons.compare_arrows,
-          size: 40.0,
-        ),
+    final _compareArrow = RotatedBox(
+      quarterTurns: 1,
+      child: Icon(
+        Icons.compare_arrows,
+        size: 40.0,
       ),
     );
 //    Transform.rotate(angle: 3.14 / 2, //math.pi/2,
@@ -224,22 +224,40 @@ class _UnitConverterState extends State<UnitConverter> {
 //        size: 40.0,
 //      ),
 //    );
+    final converter = Column(
+      children: [
+        _inputGroup,
+        _compareArrow,
+        _outputGroup,
+      ],
+    );
+
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          _inputGroup,
-          _compareArrow,
-          _outputGroup,
-        ],
-      ),
+      padding: _padding,
+      child: OrientationBuilder(
+          builder: (BuildContext context, Orientation orientation) {
+        if (orientation == Orientation.portrait) {
+          return SingleChildScrollView(
+            child: converter,
+          );
+        } else {
+          return SingleChildScrollView(
+            child: Center(
+              child: Container(
+                width: 450.0,
+                child: converter,
+              ),
+            ),
+          );
+        }
+      }),
     );
 
 //    final unitWidgets = widget.units.map((Unit unit) {
 //      return Container(
 //        color: widget.color,
 //        margin: EdgeInsets.all(8.0),
-//        padding: EdgeInsets.all(16.0),
+//        padding: _padding,
 //        child: Column(
 //          children: <Widget>[
 //            Text(

@@ -5,7 +5,7 @@ import 'category_tile.dart';
 import 'backdrop.dart';
 import 'unit_converter.dart';
 
-final _backgroundColor = Colors.green[100];
+//final _backgroundColor = Colors.green[100];
 
 class CategoryRoute extends StatefulWidget {
   const CategoryRoute();
@@ -15,7 +15,8 @@ class CategoryRoute extends StatefulWidget {
 
 class _CategoryRouteState extends State<CategoryRoute> {
   final _categories = <Category>[];
-  Category currentCategoryDisplay;
+  Category _currentCategory;
+  Category _defaultCategory;
   static const _categoryNames = <String>[
     'Length',
     'Area',
@@ -95,19 +96,32 @@ class _CategoryRouteState extends State<CategoryRoute> {
         units: _retrieveUnitList(_categoryNames[i]),
       ));
     }
-    currentCategoryDisplay = _categories[0];
+    _defaultCategory = _categories[0];
   }
 
-  Widget _buildCategoryWidgets() {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        return CategoryTile(
-          category: _categories[index],
-          onTap: _onCategoryTap,
-        );
-      },
-      itemCount: _categories.length,
-    );
+  Widget _buildCategoryWidgets(Orientation orientation) {
+    if (orientation == Orientation.portrait) {
+      return ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return CategoryTile(
+            category: _categories[index],
+            onTap: _onCategoryTap,
+          );
+        },
+        itemCount: _categories.length,
+      );
+    } else {
+      return GridView.builder(
+          itemCount: _categories.length,
+          gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 3.0,),
+          itemBuilder: (BuildContext context, int index) {
+            return CategoryTile(
+              category: _categories[index],
+              onTap: _onCategoryTap,
+            );
+          });
+    }
   }
 
   List<Unit> _retrieveUnitList(String categoryName) {
@@ -123,47 +137,44 @@ class _CategoryRouteState extends State<CategoryRoute> {
   void _onCategoryTap(Category value) {
     print('$value was tapped......');
     setState(() {
-      currentCategoryDisplay = value;
+      _currentCategory = value;
     });
   }
 
-  Text appBarText(String heading) {
-    return Text(
-      heading,
-      style: TextStyle(
-        fontSize: 30.0,
-        color: Colors.black,
-      ),
-    );
-  }
+//  Text appBarText(String heading) {
+//    return Text(
+//      heading,
+//      style: TextStyle(
+//        fontSize: 30.0,
+//        color: Colors.black,
+//      ),
+//    );
+//  }
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: _backgroundColor,
-      elevation: 0.0,
-      centerTitle: true,
-      title: Text(
-        'Unit Converter',
-        style: TextStyle(
-          fontSize: 30.0,
-          color: Colors.black,
-        ),
-      ),
-    );
 
+
+    assert(debugCheckHasMediaQuery(context));
     final listView = Container(
-      color: _backgroundColor,
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: _buildCategoryWidgets(),
+      padding: EdgeInsets.only(
+        left: 8.0,
+        right: 8.0,
+        bottom: 48.0,
+      ),
+      child: _buildCategoryWidgets(MediaQuery.of(context).orientation),
     );
 
     return Backdrop(
-        currentCategory: currentCategoryDisplay,
-        frontPanel: UnitConverter(category: currentCategoryDisplay),
-        backPanel: listView,
-        frontTitle: appBarText(currentCategoryDisplay.name),
-        backTitle: appBarText('Unit Converter'));
+      currentCategory:
+          _currentCategory == null ? _defaultCategory : _currentCategory,
+      frontPanel: _currentCategory == null
+          ? UnitConverter(category: _defaultCategory)
+          : UnitConverter(category: _currentCategory),
+      backPanel: listView,
+      frontTitle: Text('Unit Converter'),
+      backTitle: Text('Select a Category'),
+    );
 //    return Scaffold(
 //      appBar: appBar,
 //      body: listView,
