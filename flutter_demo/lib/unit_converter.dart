@@ -27,12 +27,13 @@ class _UnitConverterState extends State<UnitConverter> {
   Unit _fromValue;
   Unit _toValue;
   final _inputKey = GlobalKey(debugLabel: 'inputText');
-
+  TextEditingController inputController;
   @override
   void initState() {
     super.initState();
     createDropdownMenuItems();
     setDefaults();
+    inputController = new TextEditingController();
   }
 
   @override
@@ -43,9 +44,14 @@ class _UnitConverterState extends State<UnitConverter> {
       print('oldWidget.category was not similar');
       createDropdownMenuItems();
       setDefaults();
+      inputController.text = '';
     }
   }
-
+  @override
+  void dispose() {
+    inputController.dispose();
+    super.dispose();
+  }
   void createDropdownMenuItems() {
     var newItems = <DropdownMenuItem>[];
     for (var unit in widget.category.units) {
@@ -68,6 +74,7 @@ class _UnitConverterState extends State<UnitConverter> {
     setState(() {
       _fromValue = widget.category.units[0];
       _toValue = widget.category.units[1];
+      _updateInputValue('');
     });
   }
 
@@ -96,7 +103,6 @@ class _UnitConverterState extends State<UnitConverter> {
   }
 
   void _updateInputValue(String value) {
-    print('I was tapped with this string $value');
     setState(() {
       if (value == null || value.isEmpty) {
         _convertedValue = '';
@@ -184,6 +190,7 @@ class _UnitConverterState extends State<UnitConverter> {
 
             ),
             onChanged: _updateInputValue,
+            controller: inputController,
           ),
           _createDropdown(_fromValue.name, _updateFromConversion),
         ],

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'category.dart';
 import 'unit.dart';
 import 'category_tile.dart';
 import 'backdrop.dart';
 import 'unit_converter.dart';
+
+import 'dart:async';
+import 'dart:convert';
 
 //final _backgroundColor = Colors.green[100];
 
@@ -17,17 +21,7 @@ class _CategoryRouteState extends State<CategoryRoute> {
   final _categories = <Category>[];
   Category _currentCategory;
   Category _defaultCategory;
-  static const _categoryNames = <String>[
-    'Length',
-    'Area',
-    'Volume',
-    'Mass',
-    'Time',
-    'Digital Storage',
-    'Energy',
-    'Currency',
-//    'Cake','Radio','Terrain','Palette','Watch','Light Bulb','Gesture','Payment',
-  ];
+
 
   static const _baseColor = <Color>[
     Colors.teal,
@@ -75,28 +69,65 @@ class _CategoryRouteState extends State<CategoryRoute> {
     }),
   ];
 
-  static const _categoryIcons = <IconData>[
-    Icons.cake,
-    Icons.radio,
-    Icons.terrain,
-    Icons.palette,
-    Icons.watch,
-    Icons.lightbulb_outline,
-    Icons.gesture,
-    Icons.payment,
-  ];
-
-  void initState() {
-    super.initState();
-    for (var i = 0; i < _categoryNames.length; i++) {
-      _categories.add(Category(
-        icon: _categoryIcons[i],
-        color: _baseColors[i],
-        name: _categoryNames[i],
-        units: _retrieveUnitList(_categoryNames[i]),
-      ));
+//  @override
+//  void initState() {
+//    super.initState();
+//    for (var i = 0; i < _categoryNames.length; i++) {
+//      _categories.add(Category(
+//        icon: _categoryIcons[i],
+//        color: _baseColors[i],
+//        name: _categoryNames[i],
+//        units: _retrieveUnitList(_categoryNames[i]),
+//      ));
+//    }
+//    _defaultCategory = _categories[0];
+//  }
+//  List<Unit> _retrieveUnitList(String categoryName) {
+//    return List.generate(10, (int i) {
+//      i += 1;
+//      return Unit(
+//        conversion: i.toDouble(),
+//        name: '$categoryName unit $i',
+//      );
+//    });
+//  }
+  @override
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    if (_categories.isEmpty) {
+      await _retrieveLocalCategories();
     }
-    _defaultCategory = _categories[0];
+  }
+
+  Future<void> _retrieveLocalCategories() async {
+    final json = DefaultAssetBundle.of(context)
+        .loadString('assets/data/regular_units.json');
+    final data = JsonDecoder().convert(await json);
+
+    if (data is! Map) {
+      throw ('Data recieved from the API is not map');
+    }
+    var categoryIndex = 0;
+    data.keys.forEach((key) {
+      final List<Unit> units =
+          data[key].map<Unit>((dynamic data) => Unit.fromJson(data)).toList();
+      var iconName = key.toString().toLowerCase();
+//      if(iconName == 'digital storage'){ }
+      iconName = iconName == 'digital storage' ? 'digital_storage' : iconName;
+      var category = Category(
+        name: key,
+        color: _baseColors[categoryIndex],
+        iconLocation: 'assets/icons/$iconName.png',
+        units: units,
+      );
+      setState(() {
+        if (categoryIndex == 0) {
+          _defaultCategory = category;
+        }
+        _categories.add(category);
+      });
+      categoryIndex++;
+    });
   }
 
   Widget _buildCategoryWidgets(Orientation orientation) {
@@ -113,8 +144,10 @@ class _CategoryRouteState extends State<CategoryRoute> {
     } else {
       return GridView.builder(
           itemCount: _categories.length,
-          gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 3.0,),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 3.0,
+          ),
           itemBuilder: (BuildContext context, int index) {
             return CategoryTile(
               category: _categories[index],
@@ -124,16 +157,6 @@ class _CategoryRouteState extends State<CategoryRoute> {
     }
   }
 
-  List<Unit> _retrieveUnitList(String categoryName) {
-    return List.generate(10, (int i) {
-      i += 1;
-      return Unit(
-        conversion: i.toDouble(),
-        name: '$categoryName unit $i',
-      );
-    });
-  }
-
   void _onCategoryTap(Category value) {
     print('$value was tapped......');
     setState(() {
@@ -141,19 +164,17 @@ class _CategoryRouteState extends State<CategoryRoute> {
     });
   }
 
-//  Text appBarText(String heading) {
-//    return Text(
-//      heading,
-//      style: TextStyle(
-//        fontSize: 30.0,
-//        color: Colors.black,
-//      ),
-//    );
-//  }
-
   @override
   Widget build(BuildContext context) {
-
+    if (_categories.isEmpty) {
+      return Center(
+        child: Container(
+          height: 180.0,
+          width: 180.0,
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     assert(debugCheckHasMediaQuery(context));
     final listView = Container(

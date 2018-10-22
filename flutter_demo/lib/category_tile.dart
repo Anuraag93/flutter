@@ -14,8 +14,8 @@ class CategoryTile extends StatelessWidget {
     Key key,
     @required this.category,
     @required this.onTap,
-  }) : assert(category != null),
-  assert(onTap != null),
+  })  : assert(category != null),
+        assert(onTap != null),
         super(key: key);
 
   @override
@@ -40,14 +40,18 @@ class CategoryTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Icon(
-                      category.icon,
-                      size: 60.0,
-                    )),
+                  padding: EdgeInsets.all(16.0),
+                  child: category.iconLocation != null
+                      ? Image.asset(
+                          category.iconLocation,
+                          fit: BoxFit.contain,
+                          width: 60.0,
+                        )
+                      : null,
+                ),
                 Center(
                     child: Text(
-                      category.name,
+                  category.name,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline,
                 ))
@@ -58,6 +62,7 @@ class CategoryTile extends StatelessWidget {
       ),
     );
   }
+
   void _navigateToConverter(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
@@ -71,7 +76,8 @@ class CategoryTile extends StatelessWidget {
           centerTitle: true,
           backgroundColor: category.color,
         ),
-        body: UnitConverter(category: category,
+        body: UnitConverter(
+          category: category,
         ),
         resizeToAvoidBottomPadding: false,
       );
