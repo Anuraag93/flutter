@@ -5,11 +5,14 @@ import 'snackbar.dart';
 import 'tabs_demo.dart';
 
 class DisplayList extends StatelessWidget {
-  final page = ['Snackbar Demo', 'Tabs Demo'];
+  final List<String> page;
+
+  
+  const DisplayList({@required this.page});
+
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Display Page List'),
@@ -19,9 +22,15 @@ class DisplayList extends StatelessWidget {
           itemCount: page.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: Text('${page[index]}'),
-              onTap: (){
-                _navigateToRespectivePage(context, page[index]);
+              title: Text(
+                '${page[index]}',
+                style: TextStyle(
+                  color: Colors.brown,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onTap: () {
+                navigateToRespectivePage(context, page[index]);
 //                Navigator.push(context,MaterialPageRoute(builder: (context) => TabBarDemo()));
               },
             );
@@ -31,10 +40,13 @@ class DisplayList extends StatelessWidget {
     );
   }
 
-  _navigateToRespectivePage(BuildContext context, String page) {
-    MaterialPageRoute route = MaterialPageRoute(builder: (context) => HomePage(title: 'Cook Book',));
+  navigateToRespectivePage(BuildContext context, String page) {
+    MaterialPageRoute route = MaterialPageRoute(
+        builder: (context) => HomePage(
+              title: 'Cook Book',
+            ));
 
-    switch(page.toLowerCase()){
+    switch (page.toLowerCase()) {
       case 'snackbar demo':
         route = MaterialPageRoute(builder: (context) => SnackBarDemo());
         break;
