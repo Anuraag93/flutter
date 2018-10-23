@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'unit.dart';
@@ -123,18 +125,22 @@ class _UnitConverterState extends State<UnitConverter> {
     });
   }
 
-  void _updateConversion() {
-    setState(() {
-      _convertedValue = widget.category.name.toLowerCase() == 'currency'
-          ? Api().convert(
-              'currency',
-              _fromValue.name,
-              _toValue.name,
-              _inputValue.toString(),
-            )
-          : _format(
-              _inputValue * (_toValue.conversion / _fromValue.conversion));
-    });
+  Future<void> _updateConversion() async{
+
+      double value;
+      if(widget.category.name.toLowerCase() == 'currency') {
+        value = await Api().convert(
+          'currency',
+          _fromValue.name,
+          _toValue.name,
+          _inputValue.toString()
+        );
+      } else {
+        value = _inputValue * (_toValue.conversion / _fromValue.conversion);
+      }
+      setState(() {
+        _convertedValue = _format(value);
+      });
   }
 
   String _format(double conversion) {
@@ -212,7 +218,7 @@ class _UnitConverterState extends State<UnitConverter> {
         children: <Widget>[
           InputDecorator(
             child: Text(
-              _convertedValue.toString(),
+              _convertedValue,
               style: Theme.of(context).textTheme.display1,
             ),
             decoration: InputDecoration(
