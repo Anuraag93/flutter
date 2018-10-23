@@ -22,6 +22,7 @@ class _CategoryRouteState extends State<CategoryRoute> {
   final _categories = <Category>[];
   Category _currentCategory;
   Category _defaultCategory;
+  Api api = Api();
 
   static const _baseColor = <Color>[
     Colors.teal,
@@ -98,7 +99,6 @@ class _CategoryRouteState extends State<CategoryRoute> {
       await _retrieveLocalCategories();
       await _retrieveApiCategories();
     }
-
   }
 
   Future<void> _retrieveLocalCategories() async {
@@ -129,11 +129,9 @@ class _CategoryRouteState extends State<CategoryRoute> {
       });
       categoryIndex++;
     });
-
   }
 
   Future<void> _retrieveApiCategories() async {
-
     String iconName = 'currency';
     setState(() {
       _categories.add(Category(
@@ -143,17 +141,18 @@ class _CategoryRouteState extends State<CategoryRoute> {
         units: [],
       ));
     });
-    List<Unit> _units = await Api().getUnits(iconName);
-
-    setState(() {
-      _categories.removeLast();
-      _categories.add(Category(
-        iconLocation: 'assets/icons/$iconName.png',
-        color: _baseColors.last,
-        name: 'Currency',
-        units: _units,
-      ));
-    });
+    List<Unit> _units = await api.getUnits(iconName);
+    if (_units != null) {
+      setState(() {
+        _categories.removeLast();
+        _categories.add(Category(
+          iconLocation: 'assets/icons/$iconName.png',
+          color: _baseColors.last,
+          name: 'Currency',
+          units: _units,
+        ));
+      });
+    }
   }
 
   Widget _buildCategoryWidgets(Orientation orientation) {

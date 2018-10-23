@@ -31,6 +31,9 @@ class _UnitConverterState extends State<UnitConverter> {
   Unit _toValue;
   final _inputKey = GlobalKey(debugLabel: 'inputText');
   TextEditingController inputController;
+  Api api = Api();
+  bool showErrorUI = false;
+
   @override
   void initState() {
     super.initState();
@@ -125,22 +128,27 @@ class _UnitConverterState extends State<UnitConverter> {
     });
   }
 
-  Future<void> _updateConversion() async{
+  Future<void> _updateConversion() async {
+    if (widget.category.name.toLowerCase() == 'currency') {
+      final conversion = await api.convert(
+          'currency', _fromValue.name, _toValue.name, _inputValue.toString());
 
-      double value;
-      if(widget.category.name.toLowerCase() == 'currency') {
-        value = await Api().convert(
-          'currency',
-          _fromValue.name,
-          _toValue.name,
-          _inputValue.toString()
-        );
+      if (conversion == null) {
+        setState(() {
+          showErrorUI = true;
+        });
       } else {
-        value = _inputValue * (_toValue.conversion / _fromValue.conversion);
+        setState(() {
+          _convertedValue = _format(conversion);
+          showErrorUI = false;
+        });
       }
+    } else {
       setState(() {
-        _convertedValue = _format(value);
+        _convertedValue = _format(
+            _inputValue * (_toValue.conversion / _fromValue.conversion));
       });
+    }
   }
 
   String _format(double conversion) {
@@ -188,6 +196,37 @@ class _UnitConverterState extends State<UnitConverter> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.category.units == null ||
+        widget.category.name.toLowerCase() == 'currency' && showErrorUI) {
+      return SingleChildScrollView(
+        child: Container(
+          margin: _padding,
+          padding: _padding,
+          decoration: BoxDecoration(
+            color: widget.category.color['error'],
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.error_outline,
+                color: Colors.white,
+                size: 180.0,
+              ),
+              Text(
+                'Oh Snap! There seems to be an error occured',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline
+                    .copyWith(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     final _inputGroup = Container(
       padding: _padding,
       child: Column(
