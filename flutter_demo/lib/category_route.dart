@@ -5,6 +5,7 @@ import 'unit.dart';
 import 'category_tile.dart';
 import 'backdrop.dart';
 import 'unit_converter.dart';
+import 'api.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -21,7 +22,6 @@ class _CategoryRouteState extends State<CategoryRoute> {
   final _categories = <Category>[];
   Category _currentCategory;
   Category _defaultCategory;
-
 
   static const _baseColor = <Color>[
     Colors.teal,
@@ -96,7 +96,9 @@ class _CategoryRouteState extends State<CategoryRoute> {
     super.didChangeDependencies();
     if (_categories.isEmpty) {
       await _retrieveLocalCategories();
+      await _retrieveApiCategories();
     }
+
   }
 
   Future<void> _retrieveLocalCategories() async {
@@ -112,7 +114,6 @@ class _CategoryRouteState extends State<CategoryRoute> {
       final List<Unit> units =
           data[key].map<Unit>((dynamic data) => Unit.fromJson(data)).toList();
       var iconName = key.toString().toLowerCase();
-//      if(iconName == 'digital storage'){ }
       iconName = iconName == 'digital storage' ? 'digital_storage' : iconName;
       var category = Category(
         name: key,
@@ -127,6 +128,31 @@ class _CategoryRouteState extends State<CategoryRoute> {
         _categories.add(category);
       });
       categoryIndex++;
+    });
+
+  }
+
+  Future<void> _retrieveApiCategories() async {
+
+    String iconName = 'currency';
+    setState(() {
+      _categories.add(Category(
+        iconLocation: 'assets/icons/$iconName.png',
+        color: _baseColors.last,
+        name: 'Currency',
+        units: [],
+      ));
+    });
+    List<Unit> _units = await Api().getUnits(iconName);
+
+    setState(() {
+      _categories.removeLast();
+      _categories.add(Category(
+        iconLocation: 'assets/icons/$iconName.png',
+        color: _baseColors.last,
+        name: 'Currency',
+        units: _units,
+      ));
     });
   }
 

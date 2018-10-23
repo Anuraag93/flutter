@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'unit.dart';
 import 'category.dart';
+import 'api.dart';
 
 const _padding = EdgeInsets.all(16.0);
 
@@ -47,11 +48,13 @@ class _UnitConverterState extends State<UnitConverter> {
       inputController.text = '';
     }
   }
+
   @override
   void dispose() {
     inputController.dispose();
     super.dispose();
   }
+
   void createDropdownMenuItems() {
     var newItems = <DropdownMenuItem>[];
     for (var unit in widget.category.units) {
@@ -122,8 +125,15 @@ class _UnitConverterState extends State<UnitConverter> {
 
   void _updateConversion() {
     setState(() {
-      _convertedValue =
-          _format(_inputValue * (_toValue.conversion / _fromValue.conversion));
+      _convertedValue = widget.category.name.toLowerCase() == 'currency'
+          ? Api().convert(
+              'currency',
+              _fromValue.name,
+              _toValue.name,
+              _inputValue.toString(),
+            )
+          : _format(
+              _inputValue * (_toValue.conversion / _fromValue.conversion));
     });
   }
 
@@ -187,7 +197,6 @@ class _UnitConverterState extends State<UnitConverter> {
               labelText: 'Input',
               labelStyle: Theme.of(context).textTheme.display1,
               errorText: _showValidationError ? 'Invalid Number Entered' : null,
-
             ),
             onChanged: _updateInputValue,
             controller: inputController,
@@ -203,7 +212,7 @@ class _UnitConverterState extends State<UnitConverter> {
         children: <Widget>[
           InputDecorator(
             child: Text(
-              _convertedValue,
+              _convertedValue.toString(),
               style: Theme.of(context).textTheme.display1,
             ),
             decoration: InputDecoration(
