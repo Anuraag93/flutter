@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'snackbar.dart';
 import 'tabs_demo.dart';
+import 'splash_screen.dart';
 
 class DisplayList extends StatelessWidget {
   final List<String> page;
@@ -52,6 +53,9 @@ class DisplayList extends StatelessWidget {
         break;
       case 'tabs demo':
         route = MaterialPageRoute(builder: (context) => TabBarDemo());
+        break;
+      case 'splash screen':
+        route = MaterialPageRoute(builder: (context) => SplashScreen());
         break;
     }
 

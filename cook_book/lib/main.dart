@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'splash_screen.dart';
 
 void main() {
   runApp(CookBook());
 }
 
 class CookBook extends StatelessWidget {
-  final appName = 'Cook Book';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: appName,
-      home: HomePage(title: appName),
+      title: 'Cook Book',
+      home: SplashScreen(),
 //      theme: ThemeData(
 //        brightness: Brightness.dark,
 //        primaryColor: Colors.lightBlue[800],

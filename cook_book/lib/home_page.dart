@@ -5,7 +5,7 @@ import 'drawer_list.dart';
 
 class HomePage extends StatelessWidget {
   final String title;
-  final page = ['Snackbar Demo', 'Tabs Demo'];
+  final page = ['Splash Screen', 'Snackbar Demo', 'Tabs Demo'];
 
   HomePage({Key key, @required this.title}) : super(key: key);
 
