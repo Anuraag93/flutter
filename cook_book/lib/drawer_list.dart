@@ -36,7 +36,6 @@ class DrawerListState extends State<DrawerList> {
     ));
 
     if (page != null && page.length > 0) {
-      print('Entered');
       for (var i = 0; i < page.length; i++) {
         _listTiles.add(ListTile(
           title: Text(page[i]),

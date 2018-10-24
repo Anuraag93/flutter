@@ -5,7 +5,9 @@ class TabBarDemo extends StatefulWidget {
   @override
   TabBarDemoState createState() => TabBarDemoState();
 }
-class TabBarDemoState extends State<TabBarDemo> with SingleTickerProviderStateMixin {
+
+class TabBarDemoState extends State<TabBarDemo>
+    with SingleTickerProviderStateMixin {
   final List<Tab> myTabs = [
     Tab(icon: Icon(Icons.directions_car)),
     Tab(icon: Icon(Icons.directions_transit)),
@@ -13,17 +15,19 @@ class TabBarDemoState extends State<TabBarDemo> with SingleTickerProviderStateMi
   ];
   TabController _tabController;
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _tabController = new TabController(length: myTabs.length, vsync: this);
+    _tabController = new TabController(length: myTabs.length, vsync: this,initialIndex: 0);
   }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: myTabs.length,
       child: Scaffold(
         appBar: AppBar(
           bottom: TabBar(
+            controller: _tabController,
             tabs: myTabs,
           ),
           title: Text('Tabs Demo'),
@@ -33,14 +37,33 @@ class TabBarDemoState extends State<TabBarDemo> with SingleTickerProviderStateMi
           children: myTabs.map((Tab tab) {
             return Center(
               child: Column(
+                mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  Text(tab.text),
+                  tab.icon,
+//                  Text(tab.text),
                   RaisedButton(
-                      onPressed: () { _tabController.animateTo((_tabController.index + 1) % 2);},
+                    onPressed: () {
+
+
+                      if(_tabController.index == myTabs.length - 1){
+                        //disable button
+                        print('returned from next');
+                        return;
+                      }
+                      _tabController.animateTo((_tabController.index + 1) );
+                    },
                     child: Text('NEXT'),
                   ),
                   RaisedButton(
-                      onPressed: () {_tabController.animateTo((_tabController.index - 1) % 2);},
+                    onPressed: () {
+
+                      if(_tabController.index == 0){
+                        //disable button
+                        print('returned from previous');
+                        return;
+                      }
+                      _tabController.animateTo((_tabController.index - 1) );
+                    },
                     child: Text('PREVIOUS'),
                   ),
                 ],
