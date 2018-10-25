@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'display_list.dart';
+import 'home_page.dart';
 
 class DrawerList extends StatefulWidget {
   final List<String> page;
@@ -15,14 +15,14 @@ class DrawerList extends StatefulWidget {
 
 class DrawerListState extends State<DrawerList> {
   List<String> page;
-  DisplayList nav;
+  HomePage hp;
   List<Widget> listTiles = new List<Widget>();
 
   @override
   void initState() {
     super.initState();
     page = widget.page;
-    nav = DisplayList(page: page);
+    hp = HomePage();
     _buildPageList();
   }
 
@@ -42,7 +42,7 @@ class DrawerListState extends State<DrawerList> {
           onTap: () {
             Navigator.pop(context);
 
-            nav.navigateToRespectivePage(context, page[i]);
+            hp.navigateToRespectivePage(context, page[i]);
           },
         ));
       }

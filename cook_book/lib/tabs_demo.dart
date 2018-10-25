@@ -37,7 +37,7 @@ class TabBarDemoState extends State<TabBarDemo>
           children: myTabs.map((Tab tab) {
             return Center(
               child: Column(
-                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   tab.icon,
 //                  Text(tab.text),

@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void handleTimeout() {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => HomePage(title: 'Cook Book')));
+        builder: (BuildContext context) => HomePage()));
   }
 
   startTimeout() async {
