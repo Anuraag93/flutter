@@ -3,6 +3,7 @@ import 'home_page.dart';
 import 'dart:async';
 
 class SplashScreen extends StatefulWidget {
+  static String tag = 'splash-screen';
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -13,8 +14,7 @@ class _SplashScreenState extends State<SplashScreen>
   CurvedAnimation _iconAnimation;
 
   void handleTimeout() {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => HomePage()));
+    Navigator.of(context).pushReplacementNamed(HomePage.tag);
   }
 
   startTimeout() async {

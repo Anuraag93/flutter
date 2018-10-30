@@ -1,3 +1,4 @@
+import 'recieve_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -6,12 +7,13 @@ import 'home_page.dart';
 final verticalPadding = EdgeInsets.symmetric(vertical: 15.0);
 
 class Login extends StatefulWidget {
+  static String tag = 'login-page';
 
   @override
   LoginState createState() => LoginState();
 }
 
-final _margin = EdgeInsets.symmetric(vertical: 20.0);
+//final _margin = EdgeInsets.symmetric(vertical: 20.0);
 
 class LoginState extends State<Login> {
   String inputNumber;
@@ -49,25 +51,26 @@ class LoginState extends State<Login> {
   }
 
   void _navToOtpScreen(String btnText) {
-
-    switch(btnText.toLowerCase().trim()) {
+    switch (btnText.toLowerCase().trim()) {
       case 'receive otp':
-        if (inputNumber.length == 10) {
-          hp.navigateToRespectivePage(context, 'receive', mobile: inputNumber);
-        }
+//        if (inputNumber.length == 10) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ReceiveOtp(mobile: inputNumber,)));
+//        }
         break;
       case 'login with facebook':
-        hp.navigateToRespectivePage(context, 'receive');
+//        hp.navigateToRespectivePage(context, 'receive');
+        print('Navigating to Facebook login');
         break;
       case 'login with google':
-        hp.navigateToRespectivePage(context, 'receive');
+//        hp.navigateToRespectivePage(context, 'receive');
+        print('Navigating to Google login');
         break;
-  }
+    }
   }
 
   RaisedButton _buildRaisedButton(String btnText, IconData icon, Color color) {
     return RaisedButton(
-elevation: 1.0,
+      elevation: 1.0,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -95,9 +98,7 @@ elevation: 1.0,
     Container _inputPhoneNumber = Container(
       padding: verticalPadding,
       child: TextField(
-        inputFormatters: [
-          LengthLimitingTextInputFormatter(10)
-        ],
+        inputFormatters: [LengthLimitingTextInputFormatter(10)],
         autofocus: false,
         decoration: InputDecoration(
           labelText: 'Phone Number',
@@ -116,9 +117,9 @@ elevation: 1.0,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-
             Padding(
               padding: verticalPadding,
               child: Image(
@@ -151,16 +152,20 @@ elevation: 1.0,
                 child: Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
-                  Divider(
-                    height: 10.0,
-                    color: Colors.black,
-                  ),
-                    Container(
-                    color: Colors.white,
-                      padding: EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Text('Or', style: Theme.of(context).textTheme.subhead,),
+                    Divider(
+                      height: 10.0,
+                      color: Colors.black,
                     ),
-                ],)),
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Text(
+                        'Or',
+                        style: Theme.of(context).textTheme.subhead,
+                      ),
+                    ),
+                  ],
+                )),
             _buildRaisedButton(
                 'Login with Facebook', Icons.message, Color(0xFF334D92)),
             Padding(
@@ -171,6 +176,20 @@ elevation: 1.0,
           ],
         ),
       ),
+    );
+  }
+}
+
+class AppNavigationStart extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Travel Buddy',
+      home: Login(),
+      routes: {
+        'login':(context)=> Login(),
+//        'otp':(context)=> ReceiveOtp(),
+      },
     );
   }
 }

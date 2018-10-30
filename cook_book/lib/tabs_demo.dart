@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TabBarDemo extends StatefulWidget {
+  static String tag = 'tab-bar';
   const TabBarDemo({Key key}) : super(key: key);
   @override
   TabBarDemoState createState() => TabBarDemoState();

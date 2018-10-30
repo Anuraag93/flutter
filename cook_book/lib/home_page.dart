@@ -1,27 +1,36 @@
+import 'package:cook_book/choose_username.dart';
+import 'package:cook_book/login.dart';
+import 'package:cook_book/recieve_otp.dart';
+import 'package:cook_book/snackbar.dart';
+import 'package:cook_book/splash_screen.dart';
+import 'package:cook_book/tabs_demo.dart';
 import 'package:flutter/material.dart';
 
 import 'display_list.dart';
 import 'drawer_list.dart';
-import 'snackbar.dart';
-import 'tabs_demo.dart';
-import 'splash_screen.dart';
-import 'login.dart';
-import 'recieve_otp.dart';
 
+
+class PageTags {
+  String name;
+  String tag;
+  PageTags(this.name,this.tag);
+}
 class HomePage extends StatelessWidget {
-  final page = [
-    'Splash Screen',
-    'Login',
-    'Snackbar Demo',
-    'Tabs Demo',
-    'Receive',
-    'Choose Username'
+  static String tag = 'home-page';
+  static List<PageTags> pageList = [
+    new PageTags('Splash Screen',SplashScreen.tag),
+    new PageTags('Login',Login.tag),
+    new PageTags('Snackbar Demo',SnackBarDemo.tag),
+    new PageTags('Tabs Demo', TabBarDemo.tag),
+    new PageTags('Receive',ReceiveOtp.tag),
+    new PageTags('Choose Username', ChooseUsername.tag),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Cook Book',
           style: Theme.of(context).textTheme.headline,
@@ -42,10 +51,7 @@ class HomePage extends StatelessWidget {
         data: Theme.of(context).copyWith(accentColor: Colors.yellow),
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DisplayList(page: page)));
+            Navigator.pushNamed(context,DisplayList.tag);
           },
           child: Icon(
             Icons.add,
@@ -54,38 +60,8 @@ class HomePage extends StatelessWidget {
         ),
       ),
       drawer: DrawerList(
-        page: page,
+        pageList: pageList,
       ),
     );
-  }
-
-  navigateToRespectivePage(BuildContext context, String page,
-      {String mobile = ''}) {
-    MaterialPageRoute route =
-        MaterialPageRoute(builder: (context) => HomePage());
-
-    switch (page.toLowerCase()) {
-      case 'snackbar demo':
-        route = MaterialPageRoute(builder: (context) => SnackBarDemo());
-        break;
-      case 'tabs demo':
-        route = MaterialPageRoute(builder: (context) => TabBarDemo());
-        break;
-      case 'splash screen':
-        route = MaterialPageRoute(builder: (context) => SplashScreen());
-        break;
-      case 'login':
-        route = MaterialPageRoute(builder: (context) => Login());
-        break;
-      case 'receive':
-        route =
-            MaterialPageRoute(builder: (context) => ReceiveOtp(mobile: mobile));
-        break;
-      case 'choose username':
-        route =
-            MaterialPageRoute(builder: (context) => ReceiveOtp(mobile: mobile));
-        break;
-    }
-    Navigator.push(context, route);
   }
 }

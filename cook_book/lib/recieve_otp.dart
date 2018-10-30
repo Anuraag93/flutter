@@ -1,26 +1,59 @@
-import 'package:cook_book/home_page.dart';
+import 'package:cook_book/choose_username.dart';
+import 'package:cook_book/login.dart';
 import 'package:cook_book/pin_entry_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 final verticalPadding = EdgeInsets.symmetric(vertical: 15.0);
 
 class ReceiveOtp extends StatefulWidget {
+  static String tag = 'receive-otp';
   final String mobile;
-  ReceiveOtp({@required this.mobile});
+  ReceiveOtp({this.mobile});
 
   @override
   ReceiveOtpState createState() => ReceiveOtpState();
 }
 
 class ReceiveOtpState extends State<ReceiveOtp> {
-  HomePage hp;
+
   String inputPin;
   @override
   void initState() {
     super.initState();
-    hp = new HomePage();
   }
+  FlatButton _buildFlatButton(String text, IconData icon) {
+    return FlatButton(
+        shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: Colors.grey,
+            ),
+            borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(30.0),
+                right: Radius.circular(
+                    30.0))), //CircleBorder(side: BorderSide(color: Colors.grey)),
+        onPressed: () {
+          print('$text onPressed ');
+          if(text.toLowerCase() == 'change number'){
+            Navigator.pushNamed(context, Login.tag);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+
+            children: <Widget>[
+              Icon(
+                icon,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              Divider(indent: 4.0,),
+              Text(text, style: Theme.of(context).textTheme.subhead.copyWith(fontWeight: FontWeight.w400),),
+            ],
+          ),
+        ));
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,54 +93,17 @@ class ReceiveOtpState extends State<ReceiveOtp> {
                 style: Theme.of(context).textTheme.button,
               ),
               onPressed: () {
-                hp.navigateToRespectivePage(context, 'choose username');
+                Navigator.pushNamed(context, ChooseUsername.tag);
               }),
         ),
         Padding(
           padding: verticalPadding,
           child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              FlatButton(
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Colors.grey,
-                      ),
-                      borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(30.0),
-                          right: Radius.circular(30.0))),
-                  onPressed: () {
-                    print('Resend onPressed');
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.refresh,
-                        color: Theme.of(context).iconTheme.color,
-                      ),
-                      Text('Resend')
-                    ],
-                  )),
-              FlatButton(
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Colors.grey,
-                      ),
-                      borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(30.0),
-                          right: Radius.circular(
-                              30.0))), //CircleBorder(side: BorderSide(color: Colors.grey)),
-                  onPressed: () {
-                    print('Change Number onPressed');
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.edit,
-                        color: Theme.of(context).iconTheme.color,
-                      ),
-                      Text('Change Number')
-                    ],
-                  )),
+              _buildFlatButton('Resend', Icons.refresh,),
+              _buildFlatButton('Change Number', Icons.edit,),
             ],
           ),
         ),

@@ -116,7 +116,7 @@ class PinTextFieldState extends State<PinTextField> {
         child: Text('Validate'),
         onPressed: () {
           print('raisedButton onPressed sending $inputPin to login');
-          hp.navigateToRespectivePage(context, 'login');
+          Navigator.pushNamed(context, Login.tag);
         },
       ),
     );

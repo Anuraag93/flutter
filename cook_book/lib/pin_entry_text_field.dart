@@ -63,7 +63,6 @@ class PinEntryTextFieldState extends State<PinEntryTextField> {
       width: widget.fieldWidth,
       margin: EdgeInsets.only(right: 10.0),
       child: TextField(
-
         controller: _textControllers[i],
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,

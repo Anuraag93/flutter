@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SnackBarDemo extends StatelessWidget {
+  static String tag = 'snack-bar';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

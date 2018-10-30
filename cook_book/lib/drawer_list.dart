@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'home_page.dart';
 
 class DrawerList extends StatefulWidget {
-  final List<String> page;
+  final List<PageTags> pageList;
 
-  const DrawerList({Key key, @required this.page})
-      : assert(page != null),
+  const DrawerList({Key key, @required this.pageList})
+      : assert(pageList != null),
         super(key: key);
 
   @override
@@ -14,15 +13,12 @@ class DrawerList extends StatefulWidget {
 }
 
 class DrawerListState extends State<DrawerList> {
-  List<String> page;
-  HomePage hp;
+
   List<Widget> listTiles = new List<Widget>();
 
   @override
   void initState() {
     super.initState();
-    page = widget.page;
-    hp = HomePage();
     _buildPageList();
   }
 
@@ -35,14 +31,13 @@ class DrawerListState extends State<DrawerList> {
       ),
     ));
 
-    if (page != null && page.length > 0) {
-      for (var i = 0; i < page.length; i++) {
+    if (widget.pageList != null && widget.pageList.length > 0) {
+      for (var i = 0; i < widget.pageList.length; i++) {
         _listTiles.add(ListTile(
-          title: Text(page[i]),
+          title: Text(widget.pageList[i].name),
           onTap: () {
-            Navigator.pop(context);
-
-            hp.navigateToRespectivePage(context, page[i]);
+//            Navigator.pop(context);
+            Navigator.pushNamed(context, widget.pageList[i].tag);
           },
         ));
       }
