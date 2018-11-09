@@ -1,4 +1,5 @@
-import 'package:hacker_news/json_parsing.dart';
+
+import 'package:hacker_news/src/article.dart';
 import 'package:test/test.dart';
 import 'package:http/http.dart' as http;
 
