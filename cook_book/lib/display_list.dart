@@ -57,6 +57,7 @@ class DisplayList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Build of DisplayList');
     Material _dimondFab = Material(
       color: Colors.lightBlue,
       shape: CustomBorder(),

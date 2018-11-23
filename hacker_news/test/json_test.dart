@@ -26,7 +26,7 @@ void main(){
       final storyUrl = "https://hacker-news.firebaseio.com/v0/item/${_lstOfIds.first}.json";
       final storyRes = await http.get(storyUrl);
 
-      expect(parseArticle(storyRes.body).by,'InclinedPlane');
+      expect(parseArticle(storyRes.body), isNotNull);
     }
 
   });

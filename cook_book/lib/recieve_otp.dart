@@ -57,6 +57,8 @@ class ReceiveOtpState extends State<ReceiveOtp> {
 
   @override
   Widget build(BuildContext context) {
+    print('Build of recieve otp');
+    TextEditingController _otpController = TextEditingController();
     Column _buildContainer = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -76,12 +78,17 @@ class ReceiveOtpState extends State<ReceiveOtp> {
             style: Theme.of(context).textTheme.subhead,
           ),
         ),
-        PinEntryTextField(
-          fields: 6,
-          showFieldAsBox: false,
-          onSubmit: (pin) {
-            inputPin = pin;
-          },
+        // PinEntryTextField(
+        //   fields: 6,
+        //   showFieldAsBox: false,
+        //   onSubmit: (pin) {
+        //     inputPin = pin;
+        //   },
+        // ),
+        TextField(
+          autofocus: false,
+          controller: _otpController,
+
         ),
         Padding(
           padding: verticalPadding,
@@ -93,6 +100,7 @@ class ReceiveOtpState extends State<ReceiveOtp> {
                 style: Theme.of(context).textTheme.button,
               ),
               onPressed: () {
+
                 Navigator.pushNamed(context, ChooseUsername.tag);
               }),
         ),

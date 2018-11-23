@@ -11,6 +11,7 @@ class ChooseUsernameState extends State<ChooseUsername> {
   final _purple = Color(0x3F5C3FC6);
   @override
   Widget build(BuildContext context) {
+    print('Build of ChooseUsername');
     Container _buildTextField(String label,
         {bool showValidationError = false}) {
       return Container(
@@ -40,10 +41,7 @@ class ChooseUsernameState extends State<ChooseUsername> {
       );
     }
 
-
-
     return Scaffold(
-
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0.0,
