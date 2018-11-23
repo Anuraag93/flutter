@@ -28,6 +28,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('homepage build');
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -51,7 +52,7 @@ class HomePage extends StatelessWidget {
         data: Theme.of(context).copyWith(accentColor: Colors.yellow),
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context,DisplayList.tag);
+            Navigator.pushReplacementNamed(context,DisplayList.tag);
           },
           child: Icon(
             Icons.add,

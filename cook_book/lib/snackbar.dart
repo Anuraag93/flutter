@@ -5,10 +5,10 @@ class SnackBarDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('SnackBar Demo'),
-        ),
-        body: SnackBarPage(),
+      appBar: AppBar(
+        title: Text('SnackBar Demo'),
+      ),
+      body: SnackBarPage(),
     );
   }
 }

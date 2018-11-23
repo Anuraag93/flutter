@@ -54,7 +54,7 @@ class LoginState extends State<Login> {
     switch (btnText.toLowerCase().trim()) {
       case 'receive otp':
 //        if (inputNumber.length == 10) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ReceiveOtp(mobile: inputNumber,)));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ReceiveOtp(mobile: inputNumber,)));
 //        }
         break;
       case 'login with facebook':
@@ -92,7 +92,7 @@ class LoginState extends State<Login> {
       onPressed: () => _navToOtpScreen(btnText.toLowerCase()),
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     Container _inputPhoneNumber = Container(
