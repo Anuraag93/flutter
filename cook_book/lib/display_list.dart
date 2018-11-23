@@ -111,7 +111,7 @@ class DisplayList extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Navigator.pushNamed(context, HomePage.pageList[index].tag);
+                Navigator.pushReplacementNamed(context, HomePage.pageList[index].tag);
               },
             );
           },
